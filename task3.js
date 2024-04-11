@@ -14,38 +14,43 @@
 // страницы.
 
 const initialArticles = [
-    {
-        id: new Date().getTime(),
-        title: 'Article 1',
-        content: 'Lorem1, ipsum dolor sit amet consectetur adipisicing elit. Aspernatur delectus natus voluptas repudiandae nisi, assumenda magni nostrum cum sit totam?'
-    },
-    {
-        id: new Date().getTime(),
-        title: 'Article 2',
-        content: 'Lorem2, ipsum dolor sit amet consectetur adipisicing elit. Aspernatur delectus natus voluptas repudiandae nisi, assumenda magni nostrum cum sit totam?'
-    },
-    {
-        id: new Date().getTime(),
-        title: 'Article 3',
-        content: 'Lorem3, ipsum dolor sit amet consectetur adipisicing elit. Aspernatur delectus natus voluptas repudiandae nisi, assumenda magni nostrum cum sit totam?'
-    },
-    {
-        id: new Date().getTime(),
-        title: 'Article 4',
-        content: 'Lorem4, ipsum dolor sit amet consectetur adipisicing elit. Aspernatur delectus natus voluptas repudiandae nisi, assumenda magni nostrum cum sit totam?'
-    },
-    {
-        id: new Date().getTime(),
-        title: 'Article 5',
-        content: 'Lorem5, ipsum dolor sit amet consectetur adipisicing elit. Aspernatur delectus natus voluptas repudiandae nisi, assumenda magni nostrum cum sit totam?'
-    },
+	{
+		id: new Date().getTime(),
+		title: 'Article 1',
+		content:
+			'Lorem1, ipsum dolor sit amet consectetur adipisicing elit. Aspernatur delectus natus voluptas repudiandae nisi, assumenda magni nostrum cum sit totam?',
+	},
+	{
+		id: new Date().getTime(),
+		title: 'Article 2',
+		content:
+			'Lorem2, ipsum dolor sit amet consectetur adipisicing elit. Aspernatur delectus natus voluptas repudiandae nisi, assumenda magni nostrum cum sit totam?',
+	},
+	{
+		id: new Date().getTime(),
+		title: 'Article 3',
+		content:
+			'Lorem3, ipsum dolor sit amet consectetur adipisicing elit. Aspernatur delectus natus voluptas repudiandae nisi, assumenda magni nostrum cum sit totam?',
+	},
+	{
+		id: new Date().getTime(),
+		title: 'Article 4',
+		content:
+			'Lorem4, ipsum dolor sit amet consectetur adipisicing elit. Aspernatur delectus natus voluptas repudiandae nisi, assumenda magni nostrum cum sit totam?',
+	},
+	{
+		id: new Date().getTime(),
+		title: 'Article 5',
+		content:
+			'Lorem5, ipsum dolor sit amet consectetur adipisicing elit. Aspernatur delectus natus voluptas repudiandae nisi, assumenda magni nostrum cum sit totam?',
+	},
 ];
 
-const articlesKey = 'articles'
+const articlesKey = 'articles';
 
 if (!localStorage.getItem(articlesKey)) {
-    localStorage.setItem(articlesKey, JSON.stringify(initialArticles));
-} 
+	localStorage.setItem(articlesKey, JSON.stringify(initialArticles));
+}
 
 const articles = getLsArticles();
 
@@ -59,81 +64,74 @@ const articlesEl = document.querySelector('.articles');
 //     `
 // }).join('');
 
-articles.forEach(article => {
-    articlesEl.insertAdjacentHTML('beforeend', getArticleHtml(article));
+articles.forEach((article) => {
+	articlesEl.insertAdjacentHTML('beforeend', getArticleHtml(article));
 });
 
-articlesEl.addEventListener('click', ({target}) => {
-    if (target.closest('.removeBtn')) {
-        const articleEl = target.closest('.article');
-        const articleId = articleEl.dataset.id;
+articlesEl.addEventListener('click', ({ target }) => {
+	if (target.closest('.removeBtn')) {
+		const articleEl = target.closest('.article');
+		const articleId = articleEl.dataset.id;
 
-        articleEl.remove();
+		articleEl.remove();
 
-        const articles = getLsArticles();
-        const foundedIndex = articles.findIndex(article => article.id === Number(articleId));
+		const articles = getLsArticles();
+		const foundedIndex = articles.findIndex((article) => article.id === Number(articleId));
 
-        if (foundedIndex !== -1) {
-            articles.splice(foundedIndex, 1);
-        }
+		if (foundedIndex !== -1) {
+			articles.splice(foundedIndex, 1);
+		}
 
-        saveArticles(articles);
-        return;
-    } 
+		saveArticles(articles);
+		return;
+	}
 
-    if (target.closest('.editBtn')) {
-        const articleEl = target.closest('.article');
-        const articleId = articleEl.dataset.id;
+	if (target.closest('.editBtn')) {
+		const articleEl = target.closest('.article');
+		const articleId = articleEl.dataset.id;
 
-        const title = prompt('Введите заголовок');
-        const content = prompt('Введите контент');
+		const title = prompt('Введите заголовок');
+		const content = prompt('Введите контент');
 
-        const articles = getLsArticles();
+		const articles = getLsArticles();
 
-        const editingArticle = articles.find(article => article.id === Number(articleId));
-        if (!editingArticle) {
-            alert('Статья не найдена');
-            return;
-        }
+		const editingArticle = articles.find((article) => article.id === Number(articleId));
+		if (!editingArticle) {
+			alert('Статья не найдена');
+			return;
+		}
 
-        editingArticle.title = title;
-        editingArticle.content = content;
-        saveArticles(articles);
+		editingArticle.title = title;
+		editingArticle.content = content;
+		saveArticles(articles);
 
-        articleEl.querySelector('.title').textContent = title;
-        articleEl.querySelector('.content').textContent = content;
-
-    }
+		articleEl.querySelector('.title').textContent = title;
+		articleEl.querySelector('.content').textContent = content;
+	}
 });
 
 document.querySelector('.addBtn').addEventListener('click', () => {
+	const title = prompt('Введите заголовок');
+	const content = prompt('Введите контент');
+	const id = new Date().getTime();
 
-    const title = prompt('Введите заголовок');
-    const content = prompt('Введите контент');
-    const id = new Date().getTime();
-
-    const articles = getLsArticles();
-    const newArticle = { id, title, content }
-    articles.push(newArticle);
-    saveArticles(articles);
-    articlesEl.insertAdjacentHTML('beforeend', getArticleHtml(newArticle));
-    
+	const articles = getLsArticles();
+	const newArticle = { id, title, content };
+	articles.push(newArticle);
+	saveArticles(articles);
+	articlesEl.insertAdjacentHTML('beforeend', getArticleHtml(newArticle));
 });
 
-
-
-
-
 function getLsArticles() {
-    return JSON.parse(localStorage.getItem(articlesKey));
+	return JSON.parse(localStorage.getItem(articlesKey));
 }
 
 function saveArticles(articles) {
-    localStorage.setItem(articlesKey, JSON.stringify(articles));
+	localStorage.setItem(articlesKey, JSON.stringify(articles));
 }
 
-function getArticleHtml(article) { 
-    return `
+function getArticleHtml(article) {
+	return `
     <div class="article" data-id="${article.id}">
         <h3 class="title">${article.title}</h3>
         <p class="content">${article.content}</p>
